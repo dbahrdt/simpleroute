@@ -1,0 +1,7 @@
+Simpleroute is a simple routing application using Dijkstra's Algorithm on OpenStreetMap data.
+
+You need:
+protbuf libraries/dev stuff
+zlib dev
+qt-dev
+marble-dev
