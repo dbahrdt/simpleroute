@@ -94,7 +94,7 @@ void BackgroundRouter::route(uint32_t srcNode, uint32_t tgtNode, int rt, int acc
 	router->route(srcNode, tgtNode, &pv);
 	Graph::Route r = m_state->graph.routeInfo(std::move(pv.p), vehicleMaxSpeed, accessType);
 	tm.end();
-	std::cout << "Calculated route from " << srcNode << " to " << tgtNode << " with " << pv.p.size() << " hops in " << tm.elapsedMilliSeconds() << " ms" << std::endl;
+	std::cout << "Calculated route from " << srcNode << " to " << tgtNode << " with " << r.nodes.size() << " hops in " << tm.elapsedMilliSeconds() << " ms" << std::endl;
 	delete router;
 	emit routeCalculated(r, tm.elapsedMilliSeconds());
 }
