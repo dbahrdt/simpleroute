@@ -25,7 +25,6 @@ public:
 		uint32_t end;
 		Node() : begin(0xFFFFFFFF), end(begin) {}
 		uint32_t edgeCount() const { return end-begin; }
-		
 	};
 	
 	struct Edge final {
@@ -35,7 +34,7 @@ public:
 			ET_MOTORWAY_LINK=9, ET_TRUNK_LINK=10, ET_PRIMARY_LINK=11, ET_SECONDARY_LINK=12, ET_TERTIARY_LINK=13,
 			ET_LIVING_STREET=14, ET_PEDESTRIAN=15, ET_TRACK=16, ET_BUS_GUIDE_WAY=17, ET_RACEWAY=18, ET_ROAD=19,
 			ET_FOOTWAY=20, ET_BRIDLEWAY=21, ET_STEPS=22, ET_PATH=23, ET_CYCLEWAY=24,
-			ET_BUS_STOP=25, ET_PLATORM=26,
+			ET_BUS_STOP=25, ET_PLATFORM=26,
 			ET_END=25
 		} EdgeTypes;
 		
