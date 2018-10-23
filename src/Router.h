@@ -26,7 +26,12 @@ public:
 		virtual double weight(const Graph::Edge & e) const = 0;
 	};
 	
-	typedef enum {HOP_DISTANCE, DIJKSTRA_SET_DISTANCE, DIJKSTRA_SET_TIME, DIJKSTRA_PRIO_QUEUE_DISTANCE, DIJKSTRA_PRIO_QUEUE_TIME} RouterTypes;
+	typedef enum {
+		HOP_DISTANCE,
+		DIJKSTRA_SET_DISTANCE, DIJKSTRA_SET_TIME,
+		DIJKSTRA_PRIO_QUEUE_DISTANCE, DIJKSTRA_PRIO_QUEUE_TIME,
+		A_STAR_DISTANCE, A_STAR_TIME
+	} RouterTypes;
 public:
 	Router(const Graph * g) : m_g(g) {}
 	virtual ~Router() {}
@@ -82,7 +87,13 @@ private:
 	bool m_heapRoute;
 };
 
-}
+class AStarRouter: public Router {
+public:
+	AStarRouter(const Graph * g) : Router(g) {}
+	virtual ~AStarRouter() {}
+	virtual void route(uint32_t startNode, uint32_t endNode, PathVisitor * pathVisitor);
+};
+
 
 }//end namespace
 

@@ -74,6 +74,12 @@ void BackgroundRouter::route(uint32_t srcNode, uint32_t tgtNode, int rt, int acc
 			router = tmp;
 		}
 		break;
+	case Router::A_STAR_DISTANCE:
+		{
+			detail::AStarRouter * tmp = new detail::AStarRouter(&(m_state->graph));
+			router = tmp;
+		}
+		break;
 	case Router::HOP_DISTANCE:
 	default:
 		{
@@ -130,6 +136,8 @@ m_br(this, state)
 	m_routerSelection->addItem("Dijkstra std::set time", QVariant(Router::DIJKSTRA_SET_TIME));
 	m_routerSelection->addItem("Dijkstra std::priority_queue distance", QVariant(Router::DIJKSTRA_PRIO_QUEUE_DISTANCE));
 	m_routerSelection->addItem("Dijkstra std::priority_queue time", QVariant(Router::DIJKSTRA_PRIO_QUEUE_TIME));
+	m_routerSelection->addItem("A* distance", QVariant(Router::A_STAR_DISTANCE));
+	m_routerSelection->addItem("A* time", QVariant(Router::A_STAR_TIME));
 	
 	m_accessType = new QComboBox(this);
 	m_accessType->addItem("Foot", Graph::Edge::AT_FOOT);

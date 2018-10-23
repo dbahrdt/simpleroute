@@ -374,5 +374,9 @@ void DijkstraRouter::routeSet(uint32_t startNode, uint32_t endNode, Router::Path
 	}
 }
 
+void AStarRouter::route(uint32_t /*startNode*/, uint32_t /*endNode*/, Router::PathVisitor* /*pathVisitor*/) {
+}
+
+
 
 }}//end namespace
