@@ -7,6 +7,8 @@
 
 namespace simpleroute {
 
+class CHConstructor;
+
 class Graph {
 public:
 	struct NodeInfo final {
