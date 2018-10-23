@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <assert.h>
 #include <iostream>
+#include <cmath>
+
 #include "Graph.h"
 #define GRID_PADDING 0.001
 
