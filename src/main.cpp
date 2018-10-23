@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include <iostream>
-#include <QtGui/QApplication>
+#include <QApplication>
 #include <QFile>
 #include <QMetaType>
 

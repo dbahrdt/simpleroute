@@ -119,8 +119,8 @@ m_br(this, state)
 	m_edgesTableView->setModel(m_edgesTableModel);
 
 
-	m_nodesTableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeMode::Stretch);
-	m_edgesTableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeMode::Stretch);
+	m_nodesTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+	m_edgesTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
 	
 	QHBoxLayout * cfgLayout = new QHBoxLayout(this);
 	
