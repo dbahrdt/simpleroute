@@ -15,7 +15,7 @@ int GraphNodesTableModel::columnCount(const QModelIndex&) const {
 }
 
 int GraphNodesTableModel::rowCount(const QModelIndex&) const {
-	return m_state->graph.nodeCount();
+	return std::min<int>(m_state->graph.nodeCount(), 1000*1000);
 }
 
 QVariant GraphNodesTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -39,7 +39,7 @@ QVariant GraphNodesTableModel::headerData(int section, Qt::Orientation orientati
 			}
 		}
 		else {
-			return QVariant(section);
+			return QVariant();
 		}
 	}
 	return QVariant();
