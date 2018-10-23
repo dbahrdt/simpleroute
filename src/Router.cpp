@@ -99,7 +99,11 @@ namespace DijkstraRouterImp {
 	struct DijkstraNodeInfo {
 		uint32_t parentNodeId;
 		double weight;
+		DijkstraNodeInfo() : parentNodeId(0xFFFFFFFF), weight(-1.0) {}
 		DijkstraNodeInfo(uint32_t parentNodeId, double weight) : parentNodeId(parentNodeId), weight(weight) {}
+		bool valid() {
+			return parentNodeId != 0xFFFFFFFF;
+		}
 	};
 	
 	struct DijkstraNodeInfoSet: DijkstraNodeInfo {
@@ -110,10 +114,22 @@ namespace DijkstraRouterImp {
 		DijkstraNodeInfoSet(uint32_t parentNodeId, double weight) : DijkstraNodeInfo(parentNodeId, weight), borderIt() {}
 	};
 
-	struct NodeDistanceInfo {
-		std::unordered_map<uint32_t, DijkstraNodeInfo> d;
+	class NodeDistanceInfo {
+	public:
+		NodeDistanceInfo(uint32_t nodeCount) :
+		d(nodeCount)
+		{}
+		bool count(uint32_t nodeId) {
+			return d[nodeId].valid();
+		}
+		void emplace(uint32_t nodeId, DijkstraNodeInfo && data) {
+			d[nodeId] = std::move(data);
+		}
+		DijkstraNodeInfo & at(uint32_t nodeId) { return d[nodeId]; }
+	private:
+		std::vector<DijkstraNodeInfo> d;
 	};
-
+	
 	struct NodeDistanceInfoSet {
 		std::unordered_map<uint32_t, DijkstraNodeInfoSet> d;
 	};
@@ -193,11 +209,11 @@ void DijkstraRouter::routeHeap(uint32_t startNode, uint32_t endNode, Router::Pat
 	
 	typedef std::priority_queue<BorderInfo> BorderQueue;
 	
-	NodeDistanceInfo discoveredNodes;
+	NodeDistanceInfo discoveredNodes(graph().nodeCount());
 	BorderQueue border;
 
 	
-	discoveredNodes.d.emplace(startNode, DijkstraNodeInfoSet(startNode, 0));
+	discoveredNodes.emplace(startNode, DijkstraNodeInfoSet(startNode, 0));
 	
 	//first insert all neighbors of startNode into discovered nodes and into the border
 	{
@@ -207,12 +223,12 @@ void DijkstraRouter::routeHeap(uint32_t startNode, uint32_t endNode, Router::Pat
 				continue;
 			}
 			double weight = m_ep->weight(e);
-			if (discoveredNodes.d.count(e.target)) {
-				DijkstraNodeInfo & ni = discoveredNodes.d.at(e.target);
+			if (discoveredNodes.count(e.target)) {
+				DijkstraNodeInfo & ni = discoveredNodes.at(e.target);
 				ni.weight = std::min(ni.weight, weight);
 			}
 			else {
-				discoveredNodes.d.emplace(e.target, DijkstraNodeInfoSet(startNode, weight));
+				discoveredNodes.emplace(e.target, DijkstraNodeInfoSet(startNode, weight));
 			}
 			border.emplace(e.target, weight);
 		}
@@ -225,7 +241,7 @@ void DijkstraRouter::routeHeap(uint32_t startNode, uint32_t endNode, Router::Pat
 		border.pop();
 		
 		uint32_t curNodeId = binfo.nodeId;
-		DijkstraNodeInfo & ni = discoveredNodes.d.at(curNodeId);
+		DijkstraNodeInfo & ni = discoveredNodes.at(curNodeId);
 		
 		//check if we have to expand it
 		if (binfo.distance > ni.weight) {
@@ -242,8 +258,8 @@ void DijkstraRouter::routeHeap(uint32_t startNode, uint32_t endNode, Router::Pat
 			if (!m_ep->accessAllowed(e)) {
 				continue;
 			}
-			if (discoveredNodes.d.count(e.target)) {//already there, update the distance if necessary
-				DijkstraNodeInfo & nni = discoveredNodes.d.at(e.target);
+			if (discoveredNodes.count(e.target)) {//already there, update the distance if necessary
+				DijkstraNodeInfo & nni = discoveredNodes.at(e.target);
 				double edgeWeight = m_ep->weight(e);
 				if (nni.weight > ni.weight+edgeWeight) {
 					//this also means that e.target musst be in the border
@@ -255,13 +271,13 @@ void DijkstraRouter::routeHeap(uint32_t startNode, uint32_t endNode, Router::Pat
 			}
 			else {
 				double nw = ni.weight+m_ep->weight(e);
-				discoveredNodes.d.emplace(e.target, DijkstraNodeInfoSet(curNodeId, nw));
+				discoveredNodes.emplace(e.target, DijkstraNodeInfoSet(curNodeId, nw));
 				border.emplace(e.target, nw);
 			}
 		}
 	}
 	
-	if (!discoveredNodes.d.count(endNode)) {
+	if (!discoveredNodes.count(endNode)) {
 		return;
 	}
 	
@@ -270,7 +286,7 @@ void DijkstraRouter::routeHeap(uint32_t startNode, uint32_t endNode, Router::Pat
 	uint32_t curNodeId = endNode;
 	while(curNodeId != startNode) {
 		tmp.push_back(curNodeId);
-		curNodeId = discoveredNodes.d.at(curNodeId).parentNodeId;
+		curNodeId = discoveredNodes.at(curNodeId).parentNodeId;
 	}
 	tmp.push_back(startNode);
 	
