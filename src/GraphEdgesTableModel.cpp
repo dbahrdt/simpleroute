@@ -1,7 +1,30 @@
 #include "GraphEdgesTableModel.h"
+#include <QAbstractItemModel>
 #include "assert.h"
 
 namespace simpleroute {
+
+GraphEdgesTable::GraphEdgesTable(QWidget * parent) :
+QTableView(parent),
+m_sizeHintForRow(-1)
+{}
+
+int GraphEdgesTable::sizeHintForColumn(int /*column*/) const {
+	assert(m_sizeHintForColumn != -1);
+	return m_sizeHintForColumn;
+}
+
+
+int GraphEdgesTable::sizeHintForRow(int /*row*/) const {
+	assert(m_sizeHintForRow != -1);
+	return m_sizeHintForRow;
+}
+
+void GraphEdgesTable::setModel(QAbstractItemModel* m) {
+	QTableView::setModel(m);
+	m_sizeHintForRow = model()->headerData( 0, Qt::Vertical, Qt::SizeHintRole ).toSize().height();
+	m_sizeHintForColumn = model()->headerData( 0, Qt::Vertical, Qt::SizeHintRole ).toSize().width();
+}
 
 GraphEdgesTableModel::GraphEdgesTableModel(QObject* parent, const StatePtr& state) :
 QAbstractTableModel(parent),
@@ -15,7 +38,7 @@ int GraphEdgesTableModel::columnCount(const QModelIndex&) const {
 }
 
 int GraphEdgesTableModel::rowCount(const QModelIndex&) const {
-	return m_state->graph.edgeCount();
+	return std::min<uint32_t>(m_state->graph.edgeCount(), 10*1000*100);
 }
 
 QVariant GraphEdgesTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -41,7 +64,7 @@ QVariant GraphEdgesTableModel::headerData(int section, Qt::Orientation orientati
 			}
 		}
 		else {
-			return QVariant(section);
+			return QVariant();
 		}
 	}
 	return QVariant();

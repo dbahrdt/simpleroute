@@ -115,9 +115,9 @@ m_br(this, state)
 	m_nodesTableView = new QTableView(this);
 	m_nodesTableView->setModel(m_nodesTableModel);
 	
-	m_edgesTableView = new QTableView(this);
+	m_edgesTableView = new GraphEdgesTable(this);
 	m_edgesTableView->setModel(m_edgesTableModel);
-
+// 	m_edgesTableView->verticalHeader()->setVisible(false);
 
 	m_nodesTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 	m_edgesTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);

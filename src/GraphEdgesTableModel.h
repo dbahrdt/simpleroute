@@ -1,10 +1,23 @@
 #ifndef SIMPLE_ROUTE_GRAPH_EDGES_TABLE_MODEL_H
 #define SIMPLE_ROUTE_GRAPH_EDGES_TABLE_MODEL_H
 #include <QAbstractTableModel>
+#include <QTableView>
 #include "State.h"
 
 namespace simpleroute {
 
+class GraphEdgesTable: public QTableView {
+	Q_OBJECT
+public:
+	explicit GraphEdgesTable(QWidget* parent = 0);
+	virtual ~GraphEdgesTable() override {}
+	virtual int sizeHintForColumn(int column) const;
+	virtual int sizeHintForRow(int row) const override;
+	virtual void setModel(QAbstractItemModel* model) override;
+private:
+	int m_sizeHintForColumn;
+	int m_sizeHintForRow;
+};
 
 class GraphEdgesTableModel: public QAbstractTableModel {
 	Q_OBJECT
@@ -17,11 +30,11 @@ private:
 public:
 	GraphEdgesTableModel(QObject * parent, const StatePtr & state);
 	virtual ~GraphEdgesTableModel();
-	virtual int rowCount(const QModelIndex&) const;
-	virtual int columnCount(const QModelIndex&) const;
-	virtual QVariant data(const QModelIndex & index, int role) const;
-	virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-	virtual Qt::ItemFlags flags(const QModelIndex& /*index*/) const {
+	virtual int rowCount(const QModelIndex&) const override;
+	virtual int columnCount(const QModelIndex&) const override;
+	virtual QVariant data(const QModelIndex & index, int role) const override;
+	virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+	virtual Qt::ItemFlags flags(const QModelIndex& /*index*/) const override {
 		return (Qt::ItemIsEnabled);
 	}
 public Q_SLOTS:

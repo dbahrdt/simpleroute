@@ -12,6 +12,8 @@ namespace simpleroute {
 
 class MarbleMap;
 class GraphNodesTableModel;
+
+class GraphEdgesTable;
 class GraphEdgesTableModel;
 
 namespace detail {
@@ -61,7 +63,7 @@ private://gui stuff
 	MarbleMap * m_map;
 	
 	QTableView * m_nodesTableView;
-	QTableView * m_edgesTableView;
+	GraphEdgesTable * m_edgesTableView;
 	
 	GraphNodesTableModel * m_nodesTableModel;
 	GraphEdgesTableModel * m_edgesTableModel;
