@@ -94,7 +94,16 @@ public:
 	virtual void route(uint32_t startNode, uint32_t endNode, PathVisitor * pathVisitor);
 };
 
+class CHRouter: public Router {
+public:
+	CHRouter(const Graph * g, const CHInfo * chinfo, Graph::Edge::AccessTypes at);
+	virtual ~CHRouter() {}
+	virtual void route(uint32_t startNode, uint32_t endNode, PathVisitor * pathVisitor);
+private:
+	const CHInfo * m_chInfo;
+	Graph::Edge::AccessTypes at;
+};
 
-}//end namespace
+}}//end namespace
 
 #endif
