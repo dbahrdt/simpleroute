@@ -11,10 +11,10 @@ find_package(Qt5Gui REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Marble REQUIRED)
 
-add_subdirectory(vendor/osmpbf osmpbf)
+add_subdirectory(vendor/memgraph memgraph)
 
 SET(MY_LINK_LIBS
-	osmpbf
+	memgraph
 	${MARBLE_LIBRARIES}
 	Qt5::Widgets
 	Qt5::Gui
@@ -40,8 +40,8 @@ set(SOURCES_CPP
 	src/MainWindow.cpp
 	src/GraphNodesTableModel.cpp
 	src/GraphEdgesTableModel.cpp
-	src/Graph.cpp
 	src/MarbleMap.cpp
+	src/Graph.cpp
 	src/Grid.cpp
 	src/MarbleMap.cpp
 	src/Router.cpp

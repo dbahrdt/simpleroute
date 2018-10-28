@@ -5,7 +5,7 @@
 #include <ostream>
 
 namespace simpleroute {
-
+	
 class Graph;
 
 //only usefull in conjcuntion with the graph

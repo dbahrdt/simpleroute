@@ -1,6 +1,7 @@
 #ifndef SIMPLE_ROUTE_ROUTER_H
 #define SIMPLE_ROUTE_ROUTER_H
 #include "Graph.h"
+#include "CHGraph.h"
 
 #include <unordered_set>
 

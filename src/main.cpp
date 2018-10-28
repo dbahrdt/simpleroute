@@ -12,6 +12,7 @@ void help() {
 	std::cout << "\t-x\tgrid bins in lat\n";
 	std::cout << "\t-y\tgrid bins in lon\n";
 	std::cout << "\t-c\tdo a self-check\n";
+	std::cout << "\t-f\taccess types (car|bike|foot|all)\n";
 	std::cout << std::endl;
 }
 
@@ -39,6 +40,26 @@ int main(int argc, char ** argv) {
 			cfg.lonCount = cmdline_args.at(i+1).toUInt();
 			++i;
 		}
+		else if (cmdline_args.at(i) == "-f" && i+1 < s) {
+			auto token = cmdline_args.at(i+1);
+			if (token == "car") {
+				cfg.at |= memgraph::Graph::Edge::AT_CAR;
+			}
+			else if (token == "bike") {
+				cfg.at |= memgraph::Graph::Edge::AT_BIKE;
+			}
+			else if (token == "foot") {
+				cfg.at |= memgraph::Graph::Edge::AT_FOOT;
+			}
+			else if (token == "all") {
+				cfg.at |= memgraph::Graph::Edge::AT_ALL;
+			}
+			else {
+				help();
+				return -1;
+			}
+			++i;
+		}
 		else if(cmdline_args.at(i) == "--help" || cmdline_args.at(i) == "-h") {
 			help();
 			return 0;
@@ -47,10 +68,18 @@ int main(int argc, char ** argv) {
 			cfg.graphFileName = cmdline_args.at(i).toStdString();
 			
 		}
+		else {
+			help();
+			return 0;
+		}
 	}
 	if (!cfg.graphFileName.size()) {
 		help();
 		return -1;
+	}
+	
+	if (!cfg.at) {
+		cfg.at = simpleroute::Graph::Edge::AT_ALL;
 	}
 	
 	simpleroute::StatePtr state(new simpleroute::State(cfg));

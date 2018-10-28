@@ -11,11 +11,12 @@
 namespace simpleroute {
 
 struct Config {
-	Config() : latCount(100), lonCount(100), doSpatialSort(false) {}
+	Config() : latCount(100), lonCount(100), doSpatialSort(false), at(0) {}
 	std::string graphFileName;
 	uint32_t latCount;
 	uint32_t lonCount;
 	bool doSpatialSort;
+	int at;
 };
 
 struct State {
